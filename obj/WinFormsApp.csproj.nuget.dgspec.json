@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\领益科技集团\\越南领益LOGO\\扫码存档\\C-SN\\WinFormsApp\\WinFormsApp.csproj": {}
+    "E:\\领益科技集团\\越南领益LOGO\\扫码存档\\VN-C-SN\\WinFormsApp.csproj": {}
   },
   "projects": {
-    "E:\\领益科技集团\\越南领益LOGO\\扫码存档\\C-SN\\WinFormsApp\\WinFormsApp.csproj": {
+    "E:\\领益科技集团\\越南领益LOGO\\扫码存档\\VN-C-SN\\WinFormsApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\领益科技集团\\越南领益LOGO\\扫码存档\\C-SN\\WinFormsApp\\WinFormsApp.csproj",
+        "projectUniqueName": "E:\\领益科技集团\\越南领益LOGO\\扫码存档\\VN-C-SN\\WinFormsApp.csproj",
         "projectName": "WinFormsApp",
-        "projectPath": "E:\\领益科技集团\\越南领益LOGO\\扫码存档\\C-SN\\WinFormsApp\\WinFormsApp.csproj",
+        "projectPath": "E:\\领益科技集团\\越南领益LOGO\\扫码存档\\VN-C-SN\\WinFormsApp.csproj",
         "packagesPath": "D:\\ProgrammingTools\\Microsoft Visual Studio\\2022\\NuGet\\packages",
-        "outputPath": "E:\\领益科技集团\\越南领益LOGO\\扫码存档\\C-SN\\WinFormsApp\\obj\\",
+        "outputPath": "E:\\领益科技集团\\越南领益LOGO\\扫码存档\\VN-C-SN\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\jamie\\AppData\\Roaming\\NuGet\\NuGet.Config",

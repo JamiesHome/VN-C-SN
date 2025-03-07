@@ -8,6 +8,7 @@ public partial class MainForm : Form
     private ComboBox comboBox;
     private TableLayoutPanel tableLayout;
     private Timer timer;
+    private Button saveButton;
     public MainForm()
     {
         InitializeComponent();
@@ -15,6 +16,7 @@ public partial class MainForm : Form
         CreateDateLabel();
         CreateComboBox();
         CreateInputFields();
+        CreateSaveButton();
         SetupTimer();
     }
 }

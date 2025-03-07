@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Text;
+using System.Text.RegularExpressions;
 using Timer = System.Windows.Forms.Timer;
 
 namespace WinFormsApp;
@@ -14,7 +15,113 @@ partial class MainForm
     ///  Clean up any resources being used.
     /// </summary>
     /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-    
+    private void CreateSaveButton()
+        {
+            saveButton = new Button
+            {
+                Text = "保 存",
+                Size = new Size(120, 35),
+                Location = new Point(250, 20),
+                Font = new Font("Microsoft YaHei", 10),
+                BackColor = Color.LightSkyBlue
+            };
+            saveButton.Click += SaveButton_Click;
+            this.Controls.Add(saveButton);
+        }
+
+        // 输入验证检查
+        private bool ValidateInput()
+        {
+            var ly = (TextBox)tableLayout.Controls[4];
+            var grade1 = (TextBox)tableLayout.Controls[5];
+            var nf = (TextBox)tableLayout.Controls[6];
+            var grade2 = (TextBox)tableLayout.Controls[7];
+
+            return ly.TextLength == 12 &&
+                   grade1.TextLength == 1 &&
+                   nf.TextLength == 11 &&
+                   grade2.TextLength == 1;
+        }
+
+        // 保存事件处理
+        private void SaveButton_Click(object sender, EventArgs e) => SaveData();
+        private void Input_TextChanged(object sender, EventArgs e) => TryAutoSave();
+
+        private void TryAutoSave()
+        {
+            if (ValidateInput()) SaveData();
+        }
+
+        private void SaveData()
+        {
+            var lyBox = (TextBox)tableLayout.Controls[4];
+            var grade1Box = (TextBox)tableLayout.Controls[5];
+            var nfBox = (TextBox)tableLayout.Controls[6];
+            var grade2Box = (TextBox)tableLayout.Controls[7];
+
+            // 检查重复
+            if (CheckDuplicate(lyBox.Text))
+            {
+                MessageBox.Show("发现重码，请检查", "数据冲突", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // 生成新记录
+            var newRecord = new StringBuilder();
+            newRecord.Append($"{GetNextID()},");        // 序号
+            newRecord.Append($"{lyBox.Text},");        // LY
+            newRecord.Append($"{grade1Box.Text},");     // Grade1
+            newRecord.Append($"{nfBox.Text},");         // NF
+            newRecord.Append($"{grade2Box.Text},");     // Grade2
+            newRecord.Append($"{comboBox.SelectedItem},"); // 型号
+            newRecord.Append(dateLabel.Text);           // 时间
+
+            // 写入文件
+            try
+            {
+                bool isNewFile = !File.Exists("MGP003.csv");
+                using (var sw = new StreamWriter("MGP003.csv", true, Encoding.UTF8))
+                {
+                    if (isNewFile) sw.WriteLine("序号,LY,Grade,NF,Grade,型号,时间");
+                    sw.WriteLine(newRecord);
+                }
+
+                // 清空输入
+                lyBox.Clear();
+                grade1Box.Clear();
+                nfBox.Clear();
+                grade2Box.Clear();
+                lyBox.Focus();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"保存失败：{ex.Message}", "错误",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // 获取下个序号
+        private int GetNextID()
+        {
+            if (!File.Exists("MGP003.csv")) return 1;
+            
+            var lastLine = File.ReadLines("MGP003.csv").LastOrDefault();
+            if (string.IsNullOrEmpty(lastLine)) return 1;
+            
+            return int.TryParse(lastLine.Split(',')[0], out int id) ? id + 1 : 1;
+        }
+
+        // 查重逻辑
+        private bool CheckDuplicate(string lyValue)
+        {
+            if (!File.Exists("MGP003.csv")) return false;
+
+            return File.ReadLines("MGP003.csv")
+                .Skip(1) // 跳过标题行
+                .Any(line => line.Split(',').Length > 1 && 
+                           line.Split(',')[1] == lyValue);
+        }
     private void SetupForm()
     {
         this.ClientSize = new Size(800, 800);
@@ -44,6 +151,7 @@ partial class MainForm
         timer.Tick += (s, e) => UpdateDateTime();
         timer.Start();
     }
+    
     private void UpdateDateTime()
     {
         dateLabel.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
